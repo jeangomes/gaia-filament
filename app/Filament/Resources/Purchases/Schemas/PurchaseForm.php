@@ -20,17 +20,18 @@ class PurchaseForm
         return $schema
             ->components([
                 TextInput::make('store')
+                    ->label('Local')
                     ->required()
                     ->datalist($stores->toArray())
                     ->maxLength(200),
-                DateTimePicker::make('purchased_at')
+                DateTimePicker::make('purchased_at')->label('Data')
                     ->required(),
-                TextInput::make('amount')
+                TextInput::make('amount')->label('Valor')
                     ->required()
                     ->numeric(),
-                Textarea::make('nfce_key_access')
+                Textarea::make('nfce_key_access')->label('NFCE')
                     ->columnSpanFull(),
-                TextInput::make('tax')
+                TextInput::make('tax')->label('Imposto')
                     ->numeric(),
             ]);
     }

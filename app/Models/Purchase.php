@@ -14,6 +14,7 @@ class Purchase extends Model
     protected $casts = [
         'amount' => 'float',
         'tax' => 'float',
+        'purchased_at' => 'datetime',
     ];
 
     public function items(): HasMany

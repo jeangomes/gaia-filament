@@ -11,23 +11,19 @@ class PurchaseInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('store'),
-                TextEntry::make('purchased_at')
-                    ->dateTime(),
-                TextEntry::make('paid_at')
+                TextEntry::make('store')->label('Local'),
+                TextEntry::make('purchased_at')->label('Data')
                     ->dateTime(),
                 TextEntry::make('amount')
-                    ->numeric(),
-                TextEntry::make('nfce_key_access')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
+                    ->label('Valor')
+                    ->money('BRL'),
                 TextEntry::make('tax')
-                    ->numeric()
+                    ->label('Imposto')
+                    ->money('BRL')
                     ->placeholder('-'),
-                TextEntry::make('created_at')
-                    ->dateTime()
+                TextEntry::make('nfce_key_access')->label('NFCE Key')
                     ->placeholder('-'),
-                TextEntry::make('updated_at')
+                TextEntry::make('created_at')->label('Data de Cadastro')
                     ->dateTime()
                     ->placeholder('-'),
             ]);

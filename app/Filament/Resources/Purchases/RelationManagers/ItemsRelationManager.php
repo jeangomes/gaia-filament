@@ -89,35 +89,32 @@ class ItemsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('product_name')
             ->columns([
-                TextColumn::make('product_name')
+                TextColumn::make('product_name')->label('Nome')
                     ->searchable(),
-                TextColumn::make('product_code')
+                TextColumn::make('product_code')->label('Código')
                     ->searchable(),
-                TextColumn::make('quantity')
+                TextColumn::make('quantity')->label('Quantidade')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('unit_measure')
+                TextColumn::make('unit_measure')->label('Unidade')
                     ->searchable(),
-                TextColumn::make('unit_price')
+                TextColumn::make('unit_price')->label('Valor unitário')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('total_price')
+                TextColumn::make('total_price')->label('Valor total')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
             ])
             ->headerActions([
-                CreateAction::make(),
+                CreateAction::make()
+                    ->mutateDataUsing(function (array $data): array {
+                        $data['product_name'] = strtoupper($data['product_name']);
+
+                        return $data;
+                    }),
                 //AssociateAction::make(),
             ])
             ->recordActions([
