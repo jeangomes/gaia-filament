@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Purchases\Schemas;
 
+use App\Models\Purchase;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -11,13 +12,18 @@ class PurchaseForm
 {
     public static function configure(Schema $schema): Schema
     {
+        $stores = Purchase::query()->select('store')
+            ->distinct()
+            ->orderBy('store')
+            ->pluck('store');
+
         return $schema
             ->components([
                 TextInput::make('store')
-                    ->required(),
+                    ->required()
+                    ->datalist($stores->toArray())
+                    ->maxLength(200),
                 DateTimePicker::make('purchased_at')
-                    ->required(),
-                DateTimePicker::make('paid_at')
                     ->required(),
                 TextInput::make('amount')
                     ->required()

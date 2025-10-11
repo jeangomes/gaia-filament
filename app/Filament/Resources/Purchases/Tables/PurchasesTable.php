@@ -20,9 +20,6 @@ class PurchasesTable
                 TextColumn::make('purchased_at')
                     ->dateTime()
                     ->sortable(),
-                TextColumn::make('paid_at')
-                    ->dateTime()
-                    ->sortable(),
                 TextColumn::make('amount')
                     ->numeric()
                     ->sortable(),
@@ -38,6 +35,7 @@ class PurchasesTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('id', 'desc')
             ->filters([
                 //
             ])

@@ -1,0 +1,136 @@
+<?php
+
+namespace App\Filament\Resources\Purchases\RelationManagers;
+
+use App\Models\PurchaseItem;
+use Filament\Actions\AssociateAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\DissociateAction;
+use Filament\Actions\DissociateBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
+use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+
+class ItemsRelationManager extends RelationManager
+{
+    protected static string $relationship = 'items';
+
+    public function form(Schema $schema): Schema
+    {
+        $items = PurchaseItem::query()->select('product_name')
+            ->distinct()
+            ->orderBy('product_name')
+            ->pluck('product_name');
+        return $schema
+            ->components([
+                TextInput::make('product_name')
+                    ->label('Product name')
+                    ->datalist($items->toArray())
+                    ->required(),
+                TextInput::make('product_code')
+                    ->label('Product code')
+                    ->default('-')
+                    ->required(),
+                TextInput::make('quantity')
+                    ->label('Quantity')
+                    ->required()
+                    ->default(1)
+                    ->numeric()
+                    ->inputMode('decimal'),
+                TextInput::make('unit_measure')
+                    ->label('Unit measure')
+                    ->default('-')
+                    ->required(),
+                TextInput::make('unit_price')
+                    ->label('Unit price')
+                    ->required()
+                    ->numeric()
+                    ->inputMode('decimal'),
+                TextInput::make('total_price')
+                    ->label('Total price')
+                    ->required()
+                    ->numeric()
+                    ->inputMode('decimal'),
+            ]);
+    }
+
+    public function infolist(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                TextEntry::make('product_name'),
+                TextEntry::make('product_code'),
+                TextEntry::make('quantity')
+                    ->numeric(),
+                TextEntry::make('unit_measure'),
+                TextEntry::make('unit_price')
+                    ->numeric(),
+                TextEntry::make('total_price')
+                    ->numeric(),
+                TextEntry::make('created_at')
+                    ->dateTime()
+                    ->placeholder('-'),
+                TextEntry::make('updated_at')
+                    ->dateTime()
+                    ->placeholder('-'),
+            ]);
+    }
+
+    public function table(Table $table): Table
+    {
+        return $table
+            ->recordTitleAttribute('product_name')
+            ->columns([
+                TextColumn::make('product_name')
+                    ->searchable(),
+                TextColumn::make('product_code')
+                    ->searchable(),
+                TextColumn::make('quantity')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('unit_measure')
+                    ->searchable(),
+                TextColumn::make('unit_price')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('total_price')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->filters([
+                //
+            ])
+            ->headerActions([
+                CreateAction::make(),
+                //AssociateAction::make(),
+            ])
+            ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
+                //DissociateAction::make(),
+                DeleteAction::make(),
+            ])
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    //DissociateBulkAction::make(),
+                    DeleteBulkAction::make(),
+                ]),
+            ]);
+    }
+}
