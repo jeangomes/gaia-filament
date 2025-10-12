@@ -22,6 +22,7 @@ use Filament\Tables\Table;
 class ItemsRelationManager extends RelationManager
 {
     protected static string $relationship = 'items';
+    protected static ?string $label = 'Items';
 
     public function form(Schema $schema): Schema
     {
@@ -32,30 +33,30 @@ class ItemsRelationManager extends RelationManager
         return $schema
             ->components([
                 TextInput::make('product_name')
-                    ->label('Product name')
+                    ->label('Produto')
                     ->datalist($items->toArray())
                     ->required(),
                 TextInput::make('product_code')
-                    ->label('Product code')
+                    ->label('Código')
                     ->default('-')
                     ->required(),
                 TextInput::make('quantity')
-                    ->label('Quantity')
+                    ->label('Quantidade')
                     ->required()
                     ->default(1)
                     ->numeric()
                     ->inputMode('decimal'),
                 TextInput::make('unit_measure')
-                    ->label('Unit measure')
+                    ->label('Unidade de Medida')
                     ->default('-')
                     ->required(),
                 TextInput::make('unit_price')
-                    ->label('Unit price')
+                    ->label('Preço unitário')
                     ->required()
                     ->numeric()
                     ->inputMode('decimal'),
                 TextInput::make('total_price')
-                    ->label('Total price')
+                    ->label('Valor total')
                     ->required()
                     ->numeric()
                     ->inputMode('decimal'),
