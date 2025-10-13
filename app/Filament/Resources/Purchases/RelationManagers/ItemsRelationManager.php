@@ -120,7 +120,12 @@ class ItemsRelationManager extends RelationManager
             ])
             ->recordActions([
                 ViewAction::make(),
-                EditAction::make(),
+                EditAction::make()
+                    ->mutateDataUsing(function (array $data): array {
+                        $data['product_name'] = strtoupper($data['product_name']);
+
+                        return $data;
+                    }),
                 //DissociateAction::make(),
                 DeleteAction::make(),
             ])
