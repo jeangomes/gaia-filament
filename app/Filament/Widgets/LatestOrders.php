@@ -12,10 +12,11 @@ use Illuminate\Database\Eloquent\Builder;
 class LatestOrders extends TableWidget
 {
     protected static ?int $sort = 3;
+    protected static ?string $heading = 'Compras recentes';
     public function table(Table $table): Table
     {
         return $table
-            ->query(fn (): Builder => Purchase::query()->latest('purchased_at'))
+            ->query(fn (): Builder => Purchase::query()->limit('5')->orderByDesc('purchased_at'))
             ->columns([
                 TextColumn::make('store')->label('Local')
                     ->searchable(),
@@ -23,13 +24,14 @@ class LatestOrders extends TableWidget
                     ->dateTime()
                     ->sortable(),
                 TextColumn::make('amount')->label('Valor')
-                    ->numeric()
+                    ->money('BRL')
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->paginated(false)
             ->filters([
                 //
             ])
