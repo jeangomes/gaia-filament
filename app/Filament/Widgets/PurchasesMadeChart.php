@@ -17,6 +17,7 @@ class PurchasesMadeChart extends ApexChartWidget
      * @var string
      */
     protected static ?string $chartId = 'purchasesMadeChart';
+    protected static ?int $sort = 1;
 
     /**
      * Widget Title
