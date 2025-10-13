@@ -51,7 +51,7 @@ class PurchasesTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->defaultSort('id', 'desc')
+            ->defaultSort('purchased_at', 'desc')
             ->filters([
                 //
             ])
