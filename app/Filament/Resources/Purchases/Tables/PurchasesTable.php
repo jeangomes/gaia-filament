@@ -3,33 +3,26 @@
 namespace App\Filament\Resources\Purchases\Tables;
 
 use App\Models\Purchase;
+use Carbon\Carbon;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use IntlDateFormatter;
 
 class PurchasesTable
 {
     public static function configure(Table $table): Table
     {
-        $formatador = new IntlDateFormatter(
-            'pt_BR',
-            IntlDateFormatter::FULL,
-            IntlDateFormatter::FULL,
-            'America/Sao_Paulo',
-            IntlDateFormatter::GREGORIAN,
-            'E, dd \'de\' MMM \'de\' yyyy, HH:mm'
-        );
         return $table
             ->columns([
                 TextColumn::make('purchased_at')
                     ->label('Data')
-                    //->dateTime('l jS \o\f F Y h:i:s A')
-                    ->state(function (Purchase $record) use ($formatador) {
-                        return $formatador->format($record->purchased_at);
+                    ->formatStateUsing(function ($state) {
+                        return Carbon::parse($state)
+                            ->locale('pt_BR')
+                            ->translatedFormat('D, d \d\e M. \d\e Y, H:i');
                     })
                     ->sortable(),
                 TextColumn::make('store')
@@ -39,15 +32,19 @@ class PurchasesTable
                     ->label('Valor Total')
                     ->money('BRL')
                     ->sortable(),
+                TextColumn::make('items_sum_total_price')
+                    ->label('Soma Items')
+                    ->sum('items', 'total_price')
+                    ->money('BRL'),
                 TextColumn::make('tax')
                     ->label('Imposto')
                     ->money('BRL')
                     ->sortable(),
                 TextColumn::make('items_count')
                     ->counts('items')
-                    ->label('Total de Items'),
+                    ->label('Qtd de Items'),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->dateTime('d/m/Y H:i')->timezone('America/Sao_Paulo')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

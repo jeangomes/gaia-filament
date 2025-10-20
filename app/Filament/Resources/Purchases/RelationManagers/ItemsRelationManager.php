@@ -112,7 +112,7 @@ class ItemsRelationManager extends RelationManager
             ->headerActions([
                 CreateAction::make()
                     ->mutateDataUsing(function (array $data): array {
-                        $data['product_name'] = strtoupper($data['product_name']);
+                        $data['product_name'] = mb_strtoupper($data['product_name']);
 
                         return $data;
                     }),

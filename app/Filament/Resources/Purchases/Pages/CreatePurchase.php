@@ -12,7 +12,7 @@ class CreatePurchase extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['paid_at'] = $data['purchased_at'];
-        $data['store'] = strtoupper($data['store']);
+        $data['store'] = mb_strtoupper($data['store']);
 
         return $data;
     }
